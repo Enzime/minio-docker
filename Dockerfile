@@ -1,3 +1,7 @@
 FROM minio/minio:latest
 
-CMD ["server", "/export"]
+RUN apk add --update bash openssl
+
+ADD run-minio /bin/run-minio
+
+ENTRYPOINT ["/bin/run-minio"]

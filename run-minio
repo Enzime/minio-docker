@@ -1,0 +1,14 @@
+#!/bin/bash
+wget https://dl.minio.io/client/mc/release/linux-amd64/mc
+chmod a+x ./mc
+wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh
+chmod a+x ./wait-for-it.sh
+
+minio server /export &
+
+./wait-for-it.sh localhost:9000 -- echo "Create bucket 'docker' in minio"
+./mc config host add minio http://localhost:9000 $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+./mc mb minio/docker
+./mc policy download minio/docker
+
+wait $!
